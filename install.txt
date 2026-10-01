@@ -1,0 +1,1 @@
+Install GZDoom with Freedoom 2, then drop mod.pk3 onto gzdoom.exe or run: gzdoom.exe -iwad freedoom2.wad -file mod.pk3. Start a new game and the imps and zombies are replaced by brainrot monsters.

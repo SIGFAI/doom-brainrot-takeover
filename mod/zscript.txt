@@ -1,0 +1,378 @@
+version "4.14"
+
+class EmojiTrail : Actor
+{
+	Default
+	{
+		+NOINTERACTION;
+		+NOGRAVITY;
+		RenderStyle "Add";
+		Alpha 0.7;
+		Scale 0.3;
+	}
+	States
+	{
+	Spawn:
+		EMOJ A 1 Bright A_FadeOut(0.12);
+		Wait;
+	}
+}
+
+// Decorative emoji that float up and fade when something is hit or dies.
+class EmojiPop : Actor
+{
+	Default
+	{
+		+NOINTERACTION;
+		+NOGRAVITY;
+		Scale 0.5;
+	}
+	States
+	{
+	Spawn:
+		EMOJ A 1 Bright A_FadeOut(0.03);
+		Wait;
+	}
+}
+
+// Emoji shower falling around the player.
+class EmojiRain : Actor
+{
+	Default
+	{
+		+NOINTERACTION;
+		+NOGRAVITY;
+		Scale 0.35;
+		Alpha 0.8;
+	}
+	States
+	{
+	Spawn:
+		EMOJ A 1 Bright A_FadeOut(0.012);
+		Wait;
+	}
+}
+
+class EmojiBall : Actor
+{
+	Default
+	{
+		Radius 12;
+		Height 24;
+		Speed 14;
+		Damage 4;
+		Projectile;
+		+RANDOMIZE;
+		+FLOORHUGGER;
+		RenderStyle "Normal";
+		Scale 0.5;
+		SeeSound "brainrot/boom";
+		DeathSound "brainrot/bonk";
+	}
+	States
+	{
+	Spawn:
+		EMOJ A 2 Bright A_SpawnItemEx("EmojiTrail", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION);
+		Loop;
+	Death:
+		EMOJ A 3 Bright A_SetScale(0.8);
+		EMOJ A 3 Bright A_SetScale(1.1);
+		EMOJ A 3 Bright A_SetScale(1.4);
+		Stop;
+	}
+}
+
+class SharkSneakers : Actor replaces DoomImp
+{
+	Default
+	{
+		Health 150;
+		Radius 22;
+		Height 84;
+		Scale 0.5;
+		Speed 8;
+		PainChance 128;
+		Mass 200;
+		MeleeRange 70;
+		Monster;
+		+FLOORCLIP;
+		SeeSound "brainrot/sight";
+		PainSound "brainrot/bonk";
+		DeathSound "brainrot/die";
+		ActiveSound "brainrot/sight";
+		BloodColor "Blue";
+		Obituary "%o got bitten by a shark in sneakers.";
+	}
+	States
+	{
+	Spawn:
+		SHRK A 10 A_Look;
+		Loop;
+	See:
+		SHRK A 4 A_Chase;
+		SHRK A 4 A_Chase;
+		SHRK B 4 A_Chase;
+		SHRK B 4 A_Chase;
+		Loop;
+	Melee:
+		SHRK C 8 A_FaceTarget;
+		SHRK C 8 A_CustomMeleeAttack(random(3, 8) * 3, "brainrot/boom", "brainrot/bonk");
+		SHRK A 6;
+		Goto See;
+	Missile:
+		SHRK C 8 A_FaceTarget;
+		SHRK C 6 A_SpawnProjectile("EmojiBall", 50, 0, 0);
+		SHRK C 6 A_SpawnProjectile("EmojiBall", 50, 0, 12);
+		SHRK A 6 A_SpawnProjectile("EmojiBall", 50, 0, -12);
+		SHRK A 8;
+		Goto See;
+	Pain:
+		SHRK D 4;
+		SHRK D 4 A_Pain;
+		Goto See;
+	Death:
+		SHRK D 4 A_Scream;
+		SHRK E 4 A_NoBlocking;
+		SHRK E 3 A_SpawnItemEx("EmojiPop", 0, 0, 30, frandom(-3, 3), frandom(-3, 3), frandom(2, 4));
+		SHRK E 3 A_SpawnItemEx("EmojiPop", 0, 0, 30, frandom(-3, 3), frandom(-3, 3), frandom(2, 4));
+		SHRK E 3 A_SpawnItemEx("EmojiPop", 0, 0, 30, frandom(-3, 3), frandom(-3, 3), frandom(2, 4));
+		SHRK E -1;
+		Stop;
+	}
+}
+
+// Bigger shark that replaces the Demon.
+class SharkBig : SharkSneakers replaces Demon
+{
+	Default
+	{
+		Health 220;
+		Radius 28;
+		Height 104;
+		Speed 10;
+		Scale 0.62;
+		MeleeRange 80;
+	}
+	States
+	{
+	Spawn:
+		SHRK A 10 A_Look;
+		Loop;
+	See:
+		SHRK A 3 A_Chase;
+		SHRK A 3 A_Chase;
+		SHRK B 3 A_Chase;
+		SHRK B 3 A_Chase;
+		Loop;
+	Melee:
+		SHRK C 6 A_FaceTarget;
+		SHRK C 6 A_CustomMeleeAttack(random(4, 10) * 3, "brainrot/boom", "brainrot/bonk");
+		SHRK A 5;
+		Goto See;
+	Missile:
+		SHRK C 8 A_FaceTarget;
+		SHRK C 6 A_SpawnProjectile("EmojiBall", 65, 0, 0);
+		SHRK A 10;
+		Goto See;
+	Pain:
+		SHRK D 4;
+		SHRK D 4 A_Pain;
+		Goto See;
+	Death:
+		SHRK D 4 A_Scream;
+		SHRK E 4 A_NoBlocking;
+		SHRK E 3 A_SpawnItemEx("EmojiPop", 0, 0, 40, frandom(-3, 3), frandom(-3, 3), frandom(2, 4));
+		SHRK E -1;
+		Stop;
+	}
+}
+
+class TungLog : Actor replaces Zombieman
+{
+	Default
+	{
+		Health 80;
+		Radius 16;
+		Height 72;
+		Scale 0.5;
+		Speed 9;
+		PainChance 200;
+		Mass 100;
+		MeleeRange 64;
+		Monster;
+		+FLOORCLIP;
+		SeeSound "brainrot/sight";
+		PainSound "brainrot/bonk";
+		DeathSound "brainrot/die";
+		ActiveSound "brainrot/sight";
+		Obituary "%o was bonked by a wooden log.";
+	}
+	States
+	{
+	Spawn:
+		TUNG A 10 A_Look;
+		Loop;
+	See:
+		TUNG A 4 A_Chase;
+		TUNG A 4 A_Chase;
+		TUNG B 4 A_Chase;
+		TUNG B 4 A_Chase;
+		Loop;
+	Melee:
+		TUNG C 8 A_FaceTarget;
+		TUNG C 6 A_CustomMeleeAttack(random(2, 6) * 3, "brainrot/boom", "brainrot/bonk");
+		TUNG A 6;
+		Goto See;
+	Missile:
+		TUNG C 8 A_FaceTarget;
+		TUNG C 8 A_SpawnProjectile("EmojiBall", 50, 0, 0);
+		TUNG A 10;
+		Goto See;
+	Pain:
+		TUNG D 4;
+		TUNG D 4 A_Pain;
+		Goto See;
+	Death:
+		TUNG D 4 A_Scream;
+		TUNG E 4 A_NoBlocking;
+		TUNG E 3 A_SpawnItemEx("EmojiPop", 0, 0, 30, frandom(-3, 3), frandom(-3, 3), frandom(2, 4));
+		TUNG E -1;
+		Stop;
+	}
+}
+
+// Taller log with a bat replaces the Shotgun Guy.
+class TungLogBig : TungLog replaces ShotgunGuy
+{
+	Default
+	{
+		Health 110;
+		Radius 20;
+		Height 86;
+		Scale 0.6;
+		Speed 10;
+	}
+	States
+	{
+	Spawn:
+		TUNG A 10 A_Look;
+		Loop;
+	See:
+		TUNG A 3 A_Chase;
+		TUNG A 3 A_Chase;
+		TUNG B 3 A_Chase;
+		TUNG B 3 A_Chase;
+		Loop;
+	Melee:
+		TUNG C 6 A_FaceTarget;
+		TUNG C 6 A_CustomMeleeAttack(random(3, 8) * 3, "brainrot/boom", "brainrot/bonk");
+		TUNG A 6;
+		Goto See;
+	Missile:
+		TUNG C 8 A_FaceTarget;
+		TUNG C 6 A_SpawnProjectile("EmojiBall", 55, 0, 0);
+		TUNG C 6 A_SpawnProjectile("EmojiBall", 55, 0, 10);
+		TUNG A 8;
+		Goto See;
+	Pain:
+		TUNG D 4;
+		TUNG D 4 A_Pain;
+		Goto See;
+	Death:
+		TUNG D 4 A_Scream;
+		TUNG E 4 A_NoBlocking;
+		TUNG E 3 A_SpawnItemEx("EmojiPop", 0, 0, 40, frandom(-3, 3), frandom(-3, 3), frandom(2, 4));
+		TUNG E -1;
+		Stop;
+	}
+}
+
+// Flying emoji skull that rams the player, replaces the Lost Soul.
+class EmojiSkull : Actor replaces LostSoul
+{
+	Default
+	{
+		Health 100;
+		Radius 18;
+		Height 40;
+		Speed 8;
+		Damage 4;
+		PainChance 256;
+		Mass 50;
+		Monster;
+		+FLOAT;
+		+NOGRAVITY;
+		+MISSILEMORE;
+		+DONTFALL;
+		+NOICEDEATH;
+		Scale 0.5;
+		SeeSound "brainrot/sight";
+		PainSound "brainrot/bonk";
+		DeathSound "brainrot/die";
+		ActiveSound "brainrot/sight";
+		Obituary "%o was rammed by a laughing emoji.";
+	}
+	States
+	{
+	Spawn:
+		EMOJ A 10 Bright A_Look;
+		Loop;
+	See:
+		EMOJ A 6 Bright A_Chase;
+		Loop;
+	Missile:
+		EMOJ B 8 Bright A_FaceTarget;
+		EMOJ B 4 Bright A_SkullAttack(20);
+		EMOJ B 4 Bright;
+		Goto Missile + 1;
+	Pain:
+		EMOJ A 4 Bright A_Pain;
+		Goto See;
+	Death:
+		EMOJ C 3 Bright A_Scream;
+		EMOJ C 3 Bright A_SetScale(0.8);
+		EMOJ C 3 Bright A_NoBlocking;
+		EMOJ C 3 Bright A_SetScale(1.1);
+		EMOJ C 3 Bright A_SetScale(1.4);
+		Stop;
+	}
+}
+
+class BrainrotHandler : EventHandler
+{
+	override void PlayerEntered(PlayerEvent e)
+	{
+		Console.MidPrint(null, "BRAINROT TAKEOVER");
+	}
+
+	override void WorldTick()
+	{
+		if (level.time % 25 != 0) return;
+		let pl = players[consoleplayer].mo;
+		if (!pl) return;
+		let r = EmojiRain(Actor.Spawn("EmojiRain", pl.Vec3Offset(frandom(-250, 250), frandom(-250, 250), 160 + frandom(0, 60))));
+		if (r) r.vel.z = -5;
+	}
+
+	override void WorldThingDamaged(WorldEvent e)
+	{
+		if (e.Thing && e.Thing.bIsMonster && e.Damage > 0 && (e.Thing is "SharkSneakers" || e.Thing is "TungLog" || e.Thing is "EmojiSkull"))
+		{
+			e.Thing.A_SpawnItemEx("EmojiPop", 0, 0, e.Thing.Height * 0.6, frandom(-2, 2), frandom(-2, 2), 3, 0, SXF_NOCHECKPOSITION);
+		}
+	}
+
+	override void RenderOverlay(RenderEvent e)
+	{
+		int t = level.time;
+		if (t > 35 * 14) return;
+		Font f = Font.GetFont("BigFont");
+		String s = "BRAINROT TAKEOVER";
+		int w = f.StringWidth(s);
+		int col = (t / 5) % 2 ? Font.CR_YELLOW : Font.CR_CYAN;
+		int bob = int(sin(t * 12) * 4);
+		Screen.DrawText(f, col, (240 - w) / 2, 14 + bob, s, DTA_VirtualWidth, 240, DTA_VirtualHeight, 150);
+		if (t < 40 && (t / 4) % 2 == 0)
+			Screen.Dim(0xFF00FF, 0.25, 0, 0, Screen.GetWidth(), Screen.GetHeight());
+	}
+}
