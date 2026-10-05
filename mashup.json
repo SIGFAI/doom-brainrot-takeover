@@ -3,6 +3,12 @@
   "version": "1.0.0",
   "name": "Brainrot Takeover",
   "tagline": "Bring Brainrot into the game in the most visible and funny way. The change shows in the first 30 seconds of play.",
+  "how_to_play": [
+    "Fight through Doom's levels while brainrot monsters take over and emojis rain around you.",
+    "Imps and Demons are now sneaker-wearing sharks that spit laughing emojis; zombies are bat-swinging logs.",
+    "Lost Souls are laughing emoji skulls that ram you; shoot them before they hit.",
+    "Start a new game: the brainrot monsters show up in the first rooms."
+  ],
   "kind": "mashup",
   "games": [
     {
@@ -72,8 +78,5 @@
     "id": "doom",
     "status": "draft"
   },
-  "built_at": "2026-10-05T15:22:48.489Z",
-  "notes": [
-    "Install GZDoom with Freedoom 2, then drop mod.pk3 onto gzdoom.exe or run: gzdoom.exe -iwad freedoom2.wad -file mod.pk3. Start a new game and the imps and zombies are replaced by brainrot monsters."
-  ]
+  "built_at": "2026-10-05T15:22:48.489Z"
 }
