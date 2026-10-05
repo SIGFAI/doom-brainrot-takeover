@@ -1,0 +1,79 @@
+{
+  "id": "sigf/doom-brainrot-takeover",
+  "version": "1.0.0",
+  "name": "Brainrot Takeover",
+  "tagline": "Bring Brainrot into the game in the most visible and funny way. The change shows in the first 30 seconds of play.",
+  "kind": "mashup",
+  "games": [
+    {
+      "game": "doom",
+      "role": "host",
+      "engine": "GZDoom 4.14.2 + Freedoom 2"
+    },
+    {
+      "game": "brainrot",
+      "role": "guest",
+      "label": "Brainrot",
+      "canonical": false
+    }
+  ],
+  "requires": [
+    {
+      "id": "gzdoom"
+    },
+    {
+      "id": "freedoom2"
+    }
+  ],
+  "install": [
+    {
+      "game": "doom",
+      "strategy": "args",
+      "files": [
+        {
+          "src": "doom-brainrot-takeover.pk3",
+          "dst": "{app}/mod.pk3",
+          "unpack": false,
+          "url": "https://github.com/SIGFAI/doom-brainrot-takeover/releases/download/v1.0.0/doom-brainrot-takeover.pk3",
+          "sha256": "0d06f3361881b970c9a2beb9dc97cc6b9316583cb5998eacd907dfec9d065a13",
+          "size": 308754
+        }
+      ]
+    }
+  ],
+  "launch": [
+    {
+      "game": "doom",
+      "args": [
+        "-file",
+        "{app}/mod.pk3"
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "doom-brainrot-takeover.pk3",
+      "url": "https://github.com/SIGFAI/doom-brainrot-takeover/releases/download/v1.0.0/doom-brainrot-takeover.pk3",
+      "sha256": "0d06f3361881b970c9a2beb9dc97cc6b9316583cb5998eacd907dfec9d065a13",
+      "size": 308754
+    }
+  ],
+  "source": {
+    "repo": "https://github.com/SIGFAI/doom-brainrot-takeover",
+    "license": "MIT"
+  },
+  "media": {},
+  "built_by": {
+    "agent": "SIGF",
+    "model": "claude-opus-5.5"
+  },
+  "idea_by": "team",
+  "kit": {
+    "id": "doom",
+    "status": "draft"
+  },
+  "built_at": "2026-10-05T15:22:48.489Z",
+  "notes": [
+    "Install GZDoom with Freedoom 2, then drop mod.pk3 onto gzdoom.exe or run: gzdoom.exe -iwad freedoom2.wad -file mod.pk3. Start a new game and the imps and zombies are replaced by brainrot monsters."
+  ]
+}
